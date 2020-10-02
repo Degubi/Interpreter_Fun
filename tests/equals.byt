@@ -1,0 +1,9 @@
+push, 20
+push, 20
+push, 20
+push, 20
+cmp
+goto_if_equal, 12
+sub
+add
+return

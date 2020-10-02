@@ -1,0 +1,7 @@
+push, 10
+push, 20
+add
+goto, 10
+push, 5
+sub
+return

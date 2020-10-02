@@ -1,6 +1,6 @@
 #include "interpreter.h"
 
-int compare(int firstArg, int secondArg) {
+static inline int compare(int firstArg, int secondArg) {
     return firstArg < secondArg ? -1 : firstArg > secondArg ? 1 : 0;
 }
 

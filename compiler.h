@@ -8,6 +8,6 @@ typedef struct {
     int max_locals;
 } CompileResult;
 
-CompileResult compile_file(const char* filePath);
+CompileResult compile_file(FILE* source_file);
 
 #endif

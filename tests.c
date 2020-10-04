@@ -6,11 +6,13 @@
 #include "compiler.h"
 
 static void run_test(const char* filePath, int result) {
-    CompileResult compile_result = compile_file(filePath);
+    FILE* source_file = fopen(filePath, "r");
+    CompileResult compile_result = compile_file(source_file);
 
     assert(interpret_int(compile_result.instructions, compile_result.max_locals) == result);
 
     free(compile_result.instructions);
+    fclose(source_file);
 }
 
 int main() {

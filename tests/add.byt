@@ -1,4 +1,5 @@
-push, 10
-push, 50
+push 10
+push 50
 add
+
 return

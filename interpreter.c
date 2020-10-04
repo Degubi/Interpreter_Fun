@@ -1,3 +1,4 @@
+#include "stdio.h"
 #include "interpreter.h"
 
 static inline int compare(int firstArg, int secondArg) {
@@ -20,6 +21,7 @@ int interpret_int(Instruction* instructions, int max_locals) {
         [i_goto] = &&igoto,
         [i_goto_equal] = &&i_goto_equal,
         [i_cmp] = &&icmp,
+        [i_dup] = &&dup,
         [i_print_stack] = &&iprint_stack
     };
 
@@ -28,6 +30,9 @@ int interpret_int(Instruction* instructions, int max_locals) {
     // Stack ops
     ipush_int:
         stack[stack_ptr++] = *(++instruction_ptr);
+        goto* label_lookup[*(++instruction_ptr)];
+    dup:
+        stack[stack_ptr++] = stack[stack_ptr - 1];
         goto* label_lookup[*(++instruction_ptr)];
 
     // Math ops

@@ -3,6 +3,11 @@
 
 #include "interpreter.h"
 
-Instruction* compile_file(const char* filePath);
+typedef struct {
+    Instruction* instructions;
+    int max_locals;
+} CompileResult;
+
+CompileResult compile_file(const char* filePath);
 
 #endif

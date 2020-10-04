@@ -1,11 +1,10 @@
 #ifndef interpreter_h_guard
 #define interpreter_h_guard
 
-#include "stdio.h"
-
 typedef enum {
     i_ret = 0,
     i_push_int = 1,
+    i_dup = 10,
     i_add = 2,
     i_sub = 3,
     i_mul = 4,

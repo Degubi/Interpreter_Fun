@@ -1,6 +1,8 @@
-push, 10
-push, 50
+push 10
+push 50
 add
-push, 40
+
+push 40
 add
+
 return

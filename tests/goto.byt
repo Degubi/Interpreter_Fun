@@ -1,7 +1,11 @@
-push, 10
-push, 20
+push 10
+push 20
 add
-goto, 10
-push, 5
+
+goto end
+
+push 5
 sub
-return
+
+end:
+    return

@@ -1,5 +1,4 @@
-#include "stdio.h"
-#include "interpreter.h"
+#include "interface.h"
 
 static inline int compare(int firstArg, int secondArg) {
     return firstArg < secondArg ? -1 : firstArg > secondArg ? 1 : 0;
@@ -7,13 +6,14 @@ static inline int compare(int firstArg, int secondArg) {
 
 // Inspired by: https://youtu.be/IAdLwUXRUvg?t=1885
 
-int interpret_int(Instruction* instructions, int max_locals) {
-    int stack[max_locals];
+int interpret_int_function(Function* functions, int function_count, int function_index, const char* source_file_name) {
+    int stack[functions[function_index].max_locals];
     int stack_ptr = 0;
-    Instruction* instruction_ptr = instructions;
+    Instruction* instruction_ptr = functions[function_index].instructions;
     const void* label_lookup[] = {
         [i_ret] = &&iret,
         [i_push_int] = &&ipush_int,
+        [i_call] = &&icall,
         [i_add] = &&iadd,
         [i_sub] = &&isub,
         [i_mul] = &&imul,
@@ -54,8 +54,10 @@ int interpret_int(Instruction* instructions, int max_locals) {
         goto* label_lookup[*(++instruction_ptr)];
 
     // Control flow ops
+    icall:
+        goto* label_lookup[*(++instruction_ptr)];
     igoto:
-        instruction_ptr = instructions + *(++instruction_ptr);
+        instruction_ptr = functions[0].instructions + *(++instruction_ptr);
         goto* label_lookup[*instruction_ptr];
     i_goto_equal:
         if(stack[--stack_ptr] == 0) {

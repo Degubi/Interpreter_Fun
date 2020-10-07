@@ -1,17 +1,18 @@
-#include "stdio.h"
-#include "stdlib.h"
 #include "assert.h"
-
-#include "interpreter.h"
-#include "compiler.h"
+#include "interface.h"
 
 static void run_test(const char* filePath, int result) {
     FILE* source_file = fopen(filePath, "r");
-    CompileResult compile_result = compile_file(source_file);
+    CompilationResult compilation_result = compile_file(source_file, filePath);
+    Function* functions = compilation_result.functions;
 
-    assert(interpret_int(compile_result.instructions, compile_result.max_locals) == result);
+    assert(interpret_int_function(functions, compilation_result.function_count, compilation_result.main_index, filePath) == result);
 
-    free(compile_result.instructions);
+    for(int i = 0; i < compilation_result.function_count; ++i) {
+        free(functions[i].instructions);
+    }
+
+    free(functions);
     fclose(source_file);
 }
 
@@ -22,6 +23,7 @@ int main() {
     run_test("tests/add_sub.byt", 25);
     run_test("tests/goto.byt", 30);
     run_test("tests/equals.byt", 40);
+    run_test("tests/functions.byt", 30);
 
     printf("All done!");
     return 0;

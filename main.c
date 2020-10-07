@@ -1,7 +1,4 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "interpreter.h"
-#include "compiler.h"
+#include "interface.h"
 
 int main(int argc, char* argv[]) {
     if(argc == 1) {
@@ -16,12 +13,17 @@ int main(int argc, char* argv[]) {
         return 2;
     }
 
-    CompileResult compile_result = compile_file(file_to_execute);
-    int result = interpret_int(compile_result.instructions, compile_result.max_locals);
+    CompilationResult compilation_result = compile_file(file_to_execute, argv[1]);
+    Function* functions = compilation_result.functions;
+    int result = interpret_int_function(functions, compilation_result.function_count, compilation_result.main_index, argv[1]);
 
     printf("Function returned: %d\n", result);
 
-    free(compile_result.instructions);
+    for(int i = 0; i < compilation_result.function_count; ++i) {
+        free(functions[i].instructions);
+    }
+
+    free(functions);
     fclose(file_to_execute);
     return 0;
 }

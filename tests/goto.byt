@@ -1,11 +1,13 @@
-push 10
-push 20
-add
+main {
+    push 10
+    push 20
+    add
 
-goto end
+    goto end
 
-push 5
-sub
+    push 5
+    sub
 
-end:
-    return
+    end:
+        return
+}

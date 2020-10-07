@@ -1,12 +1,14 @@
-push 20
-dup
-dup
-dup
+main {
+    push 20
+    dup
+    dup
+    dup
 
-cmp
-goto_equal end
-sub
+    cmp
+    goto_equal end
+    sub
 
-end:
-    add
-    return
+    end:
+        add
+        return
+}

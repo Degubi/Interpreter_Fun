@@ -1,2 +1,4 @@
-push 10
-return
+main {
+    push 10
+    return
+}

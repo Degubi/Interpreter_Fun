@@ -1,10 +1,12 @@
 main {
     push 10
     push 20
+    call test
     add
+    return
+}
 
-    push 5
-    sub
-
+test {
+    push 20
     return
 }

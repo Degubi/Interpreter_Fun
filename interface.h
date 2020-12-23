@@ -8,6 +8,9 @@
 #include "ctype.h"
 #include "string.h"
 
+#define MAX_INSTRUCTION_COUNT 255
+#define MAX_FUNCTION_COUNT 10
+
 typedef enum {
     i_ret = 0,
     i_push_int = 1,
@@ -25,17 +28,16 @@ typedef enum {
 
 typedef struct {
     char* name;
-    Instruction* instructions;
+    Instruction instructions[MAX_INSTRUCTION_COUNT];
     int max_locals;
 } Function;
 
 typedef struct {
-    Function* functions;
     int function_count;
     int main_index;
-} CompilationResult;
+} CompilationInfo;
 
 int interpret_int_function(Function* functions, int function_count, int function_index, const char* source_file_name);
-CompilationResult compile_file(FILE* source_file, const char* source_file_path);
+CompilationInfo compile_file(FILE* source_file, const char* source_file_path, Function* outFunctions);
 
 #endif

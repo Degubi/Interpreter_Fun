@@ -55,7 +55,7 @@ static char* str_strip(char *str) {
     while(isspace(*--back));
     *(back + 1) = '\0';
 
-    return str; 
+    return str;
 }
 
 static bool str_is_number(char* str) {
@@ -89,9 +89,8 @@ static char* copy_str(char* original) {
     return copy;
 }
 
-CompilationResult compile_file(FILE* source_file, const char* source_file_path) {
-    Function* functions = malloc(10 * sizeof(Function));
-    FunctionCompilationState function_compilation_states[10];
+CompilationInfo compile_file(FILE* source_file, const char* source_file_path, Function* outFunctions) {
+    FunctionCompilationState function_compilation_states[MAX_FUNCTION_COUNT];
 
     char line[64];
     int line_counter = 0;
@@ -109,10 +108,9 @@ CompilationResult compile_file(FILE* source_file, const char* source_file_path) 
                 ++function_counter;
                 stripped_line[line_length - 1] = '\0';
 
-                functions[function_counter] = (Function){
+                outFunctions[function_counter] = (Function){
                     .name = copy_str(str_strip(stripped_line)),  // Re-Strip after removing '{'
-                    .max_locals = 0,
-                    .instructions = malloc(255 * sizeof(Instruction))
+                    .max_locals = 0
                 };
 
                 function_compilation_states[function_counter] = (FunctionCompilationState){
@@ -135,7 +133,7 @@ CompilationResult compile_file(FILE* source_file, const char* source_file_path) 
                 char* instruction = strtok(stripped_line, " ");
                 InstructionInfo info = convert_to_instruction_info(instruction, line_counter);
                 FunctionCompilationState* state = &function_compilation_states[function_counter];
-                Function* function = &functions[function_counter];
+                Function* function = &outFunctions[function_counter];
 
                 function->instructions[state->instructions_index++] = info.instruction;
 
@@ -179,7 +177,7 @@ CompilationResult compile_file(FILE* source_file, const char* source_file_path) 
 
     int main_index = -1;
     for(int f = 0; f <= function_counter; ++f) {
-        Function* function = &functions[f];
+        Function* function = &outFunctions[f];
         FunctionCompilationState* state = &function_compilation_states[f];
 
         if(strcmp(function->name, "main") == 0) {
@@ -209,5 +207,5 @@ CompilationResult compile_file(FILE* source_file, const char* source_file_path) 
         exit(420);
     }
 
-    return (CompilationResult){ .functions = functions, .function_count = function_counter + 1 };
+    return (CompilationInfo){ .function_count = function_counter + 1, .main_index = main_index };
 }
